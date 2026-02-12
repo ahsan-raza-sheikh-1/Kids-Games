@@ -1,0 +1,89 @@
+{
+  "name": "kids-storytelling-game-web",
+  "version": "1.0.0",
+  "description": "Interactive storytelling game for children ages 5-9 with educational content and COPPA compliance",
+  "homepage": "https://yourusername.github.io/kids-storytelling-game/web-build/",
+  "main": "web-build/index.html",
+  "scripts": {
+    "start": "cd web-build && python -m http.server 8000",
+    "start-node": "cd web-build && npx http-server -p 8000",
+    "build": "echo Game already built in web-build directory",
+    "deploy-netlify": "npx netlify deploy --prod",
+    "deploy-vercel": "cd web-build && vercel --prod",
+    "deploy-firebase": "firebase deploy",
+    "test": "echo No tests specified for web build",
+    "lint": "echo No linting configured",
+    "validate": "echo Validating web build... && node validate-build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/kids-storytelling-game.git"
+  },
+  "keywords": [
+    "kids",
+    "children",
+    "storytelling",
+    "educational",
+    "interactive",
+    "COPPA",
+    "web-game",
+    "HTML5",
+    "family-friendly",
+    "learning",
+    "mini-games",
+    "character-customization"
+  ],
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yourusername/kids-storytelling-game/issues"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "pg": "^8.11.0"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "netlify-cli": "^16.0.0",
+    "vercel": "^32.0.0",
+    "firebase-tools": "^12.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ],
+  "coppa": {
+    "compliant": true,
+    "dataCollection": "none",
+    "ageRange": "5-9",
+    "parentalControls": true,
+    "privacyPolicy": "included"
+  },
+  "features": {
+    "interactiveStories": true,
+    "characterCustomization": true,
+    "miniGames": true,
+    "voiceNarration": true,
+    "parentalControls": true,
+    "offlineMode": true,
+    "responsiveDesign": true,
+    "accessibility": true
+  },
+  "platforms": {
+    "web": true,
+    "mobile": true,
+    "tablet": true,
+    "desktop": true
+  },
+  "deployment": {
+    "githubPages": "enabled",
+    "netlify": "supported",
+    "vercel": "supported",
+    "firebase": "supported",
+    "staticHosts": "compatible"
+  }
+}

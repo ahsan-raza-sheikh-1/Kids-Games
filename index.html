@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Kids Storytelling Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    <!-- Meta tags for social sharing -->
+    <meta name="description"
+        content="An engaging, educational, and safe interactive storytelling game for children ages 5-9. Features branching narratives, character customization, and educational mini-games.">
+    <meta name="keywords"
+        content="kids games, storytelling, educational games, children, interactive stories, learning">
+    <meta name="author" content="Interactive Kids Stories">
+
+    <!-- Open Graph meta tags -->
+    <meta property="og:title" content="Interactive Kids Storytelling Game">
+    <meta property="og:description" content="Safe, educational storytelling adventures for children ages 5-9">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://your-domain.com">
+    <meta property="og:image" content="https://your-domain.com/preview-image.png">
+
+    <!-- Privacy and safety -->
+    <meta name="robots" content="index, follow">
+    <meta name="rating" content="general">
+    <meta name="age-rating" content="all">
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="game-logo">📚✨</div>
+            <h1>Interactive Kids Storytelling</h1>
+            <div class="loading-spinner"></div>
+            <p>Loading magical stories...</p>
+        </div>
+    </div>
+
+    <!-- Game Container -->
+    <div id="game-container" class="game-container hidden">
+        <!-- Header -->
+        <header class="game-header">
+            <div class="header-left">
+                <button id="back-btn" class="icon-btn hidden">⬅️</button>
+                <h1 class="game-title">📚 Kids Stories</h1>
+            </div>
+            <div class="header-right">
+                <span id="player-score" class="score-display">⭐ Score: 0</span>
+                <button id="dark-mode-toggle" class="icon-btn" title="Toggle Dark Mode">🌙</button>
+                <button id="audio-toggle" class="icon-btn" title="Toggle Audio">🔊</button>
+                <button id="parent-controls" class="icon-btn" title="Parental Controls">👨‍👩‍👧‍👦</button>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main id="main-content" class="main-content">
+            <!-- Main Menu -->
+            <section id="main-menu" class="screen active">
+                <div class="menu-content">
+                    <div class="welcome-message">
+                        <h2>Welcome to Magical Stories! 🌟</h2>
+                        <p>Choose your adventure and create your character!</p>
+                    </div>
+
+                    <div class="menu-buttons">
+                        <button class="menu-btn primary" onclick="showStorySelection()">
+                            📖 Start Story Adventure
+                        </button>
+                        <button class="menu-btn secondary" onclick="showCharacterCreator()">
+                            👤 Create Your Character
+                        </button>
+                        <button class="menu-btn secondary" onclick="showMiniGames()">
+                            🎮 Play Mini-Games
+                        </button>
+                        <button class="menu-btn tertiary" onclick="showParentalControls()">
+                            ⚙️ Parental Controls
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Story Selection -->
+            <section id="story-selection" class="screen">
+                <div class="story-grid">
+                    <div class="story-card" onclick="startStory('forest-adventure')">
+                        <div class="story-image">🌲</div>
+                        <h3>The Friendly Forest</h3>
+                        <p>Ages 5-8 • Adventure & Friendship</p>
+                        <div class="story-badges">
+                            <span class="badge">🐰 Animals</span>
+                            <span class="badge">🤝 Friendship</span>
+                        </div>
+                    </div>
+
+                    <div class="story-card" onclick="startStory('ocean-mystery')">
+                        <div class="story-image">🌊</div>
+                        <h3>Ocean Mystery</h3>
+                        <p>Ages 6-9 • Mystery & Learning</p>
+                        <div class="story-badges">
+                            <span class="badge">🐟 Sea Life</span>
+                            <span class="badge">🔍 Problem Solving</span>
+                        </div>
+                    </div>
+
+                    <div class="story-card" onclick="startStory('space-adventure')">
+                        <div class="story-image">🚀</div>
+                        <h3>Cosmic Explorer</h3>
+                        <p>Ages 7-9 • Space & Science</p>
+                        <div class="story-badges">
+                            <span class="badge">🌟 Space</span>
+                            <span class="badge">🔭 Discovery</span>
+                        </div>
+                    </div>
+
+                    <div class="story-card" onclick="startStory('dragon-castle')">
+                        <div class="story-image">🏰</div>
+                        <h3>Friendly Dragon</h3>
+                        <p>Ages 5-8 • Fantasy & Kindness</p>
+                        <div class="story-badges">
+                            <span class="badge">🐉 Dragons</span>
+                            <span class="badge">💝 Kindness</span>
+                        </div>
+                    </div>
+
+                    <div class="story-card coming-soon">
+                        <div class="story-image">🏫</div>
+                        <h3>School Adventures</h3>
+                        <p>Coming Soon!</p>
+                        <div class="story-badges">
+                            <span class="badge">� Learning</span>
+                        </div>
+                    </div>
+
+                    <div class="story-card coming-soon">
+                        <div class="story-image">🎪</div>
+                        <h3>Circus Fun</h3>
+                        <p>Coming Soon!</p>
+                        <div class="story-badges">
+                            <span class="badge">🎭 Entertainment</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Story Player -->
+            <section id="story-player" class="screen">
+                <div class="story-content">
+                    <div id="story-image" class="story-image-large">🌲</div>
+                    <div class="story-text-container">
+                        <h3 id="story-title">Story Title</h3>
+                        <div id="story-text" class="story-text">
+                            Story text will appear here...
+                        </div>
+                        <div id="story-choices" class="story-choices"></div>
+                    </div>
+                    <div class="story-controls">
+                        <button id="story-pause-btn" class="control-btn" onclick="toggleStoryPause()">⏸️ Pause</button>
+                        <button id="story-audio-btn" class="control-btn" onclick="toggleNarration()">🔊 Listen</button>
+                        <button id="story-continue" class="control-btn primary hidden"
+                            onclick="continueStory()">Continue →</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Character Creator -->
+            <section id="character-creator" class="screen">
+                <div class="character-creator-content">
+                    <div class="character-preview">
+                        <div id="character-display" class="character-display">
+                            <div class="character-base">👤</div>
+                            <div id="character-hair" class="character-part"></div>
+                            <div id="character-clothes" class="character-part"></div>
+                            <div id="character-accessories" class="character-part"></div>
+                        </div>
+                        <input type="text" id="character-name" placeholder="Enter character name"
+                            class="character-name-input">
+                    </div>
+
+                    <div class="customization-options">
+                        <div class="option-category">
+                            <h4>Skin Tone</h4>
+                            <div class="option-buttons">
+                                <button class="option-btn" onclick="customizeCharacter('skin', '👶🏻')">🏻</button>
+                                <button class="option-btn" onclick="customizeCharacter('skin', '👶🏼')">🏼</button>
+                                <button class="option-btn" onclick="customizeCharacter('skin', '👶🏽')">🏽</button>
+                                <button class="option-btn" onclick="customizeCharacter('skin', '👶🏾')">🏾</button>
+                                <button class="option-btn" onclick="customizeCharacter('skin', '👶🏿')">🏿</button>
+                            </div>
+                        </div>
+
+                        <div class="option-category">
+                            <h4>Hair Style</h4>
+                            <div class="option-buttons">
+                                <button class="option-btn" onclick="customizeCharacter('hair', '🦱')">🦱</button>
+                                <button class="option-btn" onclick="customizeCharacter('hair', '👩‍🦳')">Short</button>
+                                <button class="option-btn" onclick="customizeCharacter('hair', '👩‍🦰')">Long</button>
+                                <button class="option-btn" onclick="customizeCharacter('hair', '👩‍🦲')">Bald</button>
+                            </div>
+                        </div>
+
+                        <div class="option-category">
+                            <h4>Clothing</h4>
+                            <div class="option-buttons">
+                                <button class="option-btn" onclick="customizeCharacter('clothes', '👕')">👕</button>
+                                <button class="option-btn" onclick="customizeCharacter('clothes', '👗')">👗</button>
+                                <button class="option-btn" onclick="customizeCharacter('clothes', '🦺')">🦺</button>
+                                <button class="option-btn" onclick="customizeCharacter('clothes', '👔')">👔</button>
+                            </div>
+                        </div>
+
+                        <button class="save-character-btn" onclick="saveCharacter()">Save Character ✅</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mini Games -->
+            <section id="mini-games" class="screen">
+                <div class="mini-games-grid">
+                    <!-- Numbers & Counting Games -->
+                    <div class="game-category">
+                        <h3>🔢 Numbers & Counting</h3>
+                        <div class="mini-game-card" onclick="startMiniGame('counting')">
+                            <div class="game-icon">🔢</div>
+                            <h4>Counting Fun</h4>
+                            <p>Count objects and learn numbers!</p>
+                            <div class="difficulty">Ages 5-7</div>
+                        </div>
+
+                        <div class="mini-game-card" onclick="startMiniGame('numbers')">
+                            <div class="game-icon">🔢</div>
+                            <h4>Number Sequence</h4>
+                            <p>Complete the number patterns!</p>
+                            <div class="difficulty">Ages 6-8</div>
+                        </div>
+
+                        <div class="mini-game-card" onclick="startMiniGame('time')">
+                            <div class="game-icon">🕐</div>
+                            <h4>Time Learning</h4>
+                            <p>Learn to read the clock!</p>
+                            <div class="difficulty">Ages 7-9</div>
+                        </div>
+
+                        <div class="mini-game-card" onclick="startMiniGame('sudoku')">
+                            <div class="game-icon">🔢</div>
+                            <h4>Sudoku Puzzle</h4>
+                            <p>Fill the grid with numbers!</p>
+                            <div class="difficulty">Ages 7-9</div>
+                        </div>
+                    </div>
+
+                    <!-- Colors & Shapes Games -->
+                    <div class="game-category">
+                        <h3>🎨 Colors & Shapes</h3>
+                        <div class="mini-game-card" onclick="startMiniGame('colors')">
+                            <div class="game-icon">�</div>
+                            <h4>Color Learning</h4>
+                            <p>Identify and match colors!</p>
+                            <div class="difficulty">Ages 5-6</div>
+                        </div>
+
+                        <div class="mini-game-card" onclick="startMiniGame('shapes')">
+                            <div class="game-icon">📐</div>
+                            <h4>Shape Recognition</h4>
+                            <p>Find circles, squares, and more!</p>
+                            <div class="difficulty">Ages 5-7</div>
+                        </div>
+
+                        <div class="mini-game-card" onclick="startMiniGame('patterns')">
+                            <div class="game-icon">🔄</div>
+                            <h4>Pattern Game</h4>
+                            <p>Complete the sequences!</p>
+                            <div class="difficulty">Ages 6-8</div>
+                        </div>
+
+                        <div class="mini-game-card" onclick="startMiniGame('drawing')">
+                            <div class="game-icon">🎨</div>
+                            <h4>Drawing Fun</h4>
+                            <p>Create colorful artwork!</p>
+                            <div class="difficulty">Ages 5-9</div>
+                        </div>
+                    </div>
+
+                    <!-- Letters & Words Games -->
+                    <div class="game-category">
+                        <h3>📚 Letters & Words</h3>
+                        <div class="mini-game-card" onclick="startMiniGame('letters')">
+                            <div class="game-icon">🔤</div>
+                            <h4>Letter Matching</h4>
+                            <p>Match uppercase and lowercase!</p>
+                            <div class="difficulty">Ages 5-7</div>
+                        </div>
+
+                        <div class="mini-game-card" onclick="startMiniGame('rhyming')">
+                            <div class="game-icon">🎵</div>
+                            <h4>Rhyming Game</h4>
+                            <p>Find words that sound alike!</p>
+                            <div class="difficulty">Ages 6-8</div>
+                        </div>
+
+                        <div class="mini-game-card" onclick="startMiniGame('riddles')">
+                            <div class="game-icon">🤔</div>
+                            <h4>Fun Riddles</h4>
+                            <p>Solve puzzling questions!</p>
+                            <div class="difficulty">Ages 7-9</div>
+                        </div>
+
+                        <div class="mini-game-card" onclick="startMiniGame('fillblank')">
+                            <div class="game-icon">✏️</div>
+                            <h4>Fill in the Blank</h4>
+                            <p>Complete the sentences!</p>
+                            <div class="difficulty">Ages 6-8</div>
+                        </div>
+                    </div>
+
+                    <!-- Memory & Logic Games -->
+                    <div class="game-category">
+                        <h3>🧠 Memory & Logic</h3>
+                        <div class="mini-game-card" onclick="startMiniGame('matching')">
+                            <div class="game-icon">🎯</div>
+                            <h4>Memory Match</h4>
+                            <p>Find matching pairs!</p>
+                            <div class="difficulty">Ages 6-9</div>
+                        </div>
+
+                        <div class="mini-game-card" onclick="startMiniGame('sorting')">
+                            <div class="game-icon">📦</div>
+                            <h4>Sorting Game</h4>
+                            <p>Group similar items together!</p>
+                            <div class="difficulty">Ages 5-7</div>
+                        </div>
+
+                        <div class="mini-game-card" onclick="startMiniGame('maze')">
+                            <div class="game-icon">🗺️</div>
+                            <h4>Maze Adventure</h4>
+                            <p>Find your way through!</p>
+                            <div class="difficulty">Ages 6-9</div>
+                        </div>
+
+                        <div class="mini-game-card" onclick="startMiniGame('puzzle')">
+                            <div class="game-icon">🧩</div>
+                            <h4>Picture Puzzle</h4>
+                            <p>Put the pieces together!</p>
+                            <div class="difficulty">Ages 5-8</div>
+                        </div>
+
+                        <div class="mini-game-card" onclick="startMiniGame('tictactoe')">
+                            <div class="game-icon">❌⭕</div>
+                            <h4>Tic-Tac-Toe</h4>
+                            <p>Play against the computer!</p>
+                            <div class="difficulty">Ages 5-9</div>
+                        </div>
+                    </div>
+
+                    <!-- World Around Us Games -->
+                    <div class="game-category">
+                        <h3>🌍 World Around Us</h3>
+                        <div class="mini-game-card" onclick="startMiniGame('animals')">
+                            <div class="game-icon">🔊</div>
+                            <h4>Animal Sounds</h4>
+                            <p>Match animals with their sounds!</p>
+                            <div class="difficulty">Ages 5-7</div>
+                        </div>
+
+                        <div class="mini-game-card" onclick="startMiniGame('weather')">
+                            <div class="game-icon">🌤️</div>
+                            <h4>Weather Game</h4>
+                            <p>Learn about different weather!</p>
+                            <div class="difficulty">Ages 6-8</div>
+                        </div>
+
+                        <div class="mini-game-card" onclick="startMiniGame('space')">
+                            <div class="game-icon">🚀</div>
+                            <h4>Space Explorer</h4>
+                            <p>Discover planets and stars!</p>
+                            <div class="difficulty">Ages 7-9</div>
+                        </div>
+
+                        <div class="mini-game-card" onclick="startMiniGame('garden')">
+                            <div class="game-icon">🌱</div>
+                            <h4>Gardening Fun</h4>
+                            <p>Help plants grow healthy!</p>
+                            <div class="difficulty">Ages 6-8</div>
+                        </div>
+                    </div>
+
+                    <!-- Creative & Fun Games -->
+                    <div class="game-category">
+                        <h3>🎵 Creative & Fun</h3>
+                        <div class="mini-game-card" onclick="startMiniGame('music')">
+                            <div class="game-icon">🎵</div>
+                            <h4>Music Memory</h4>
+                            <p>Remember and repeat melodies!</p>
+                            <div class="difficulty">Ages 6-9</div>
+                        </div>
+
+                        <div class="mini-game-card" onclick="startMiniGame('cooking')">
+                            <div class="game-icon">👨‍🍳</div>
+                            <h4>Cooking Game</h4>
+                            <p>Make delicious recipes!</p>
+                            <div class="difficulty">Ages 5-8</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Parental Controls -->
+            <section id="parental-controls" class="screen">
+                <div class="parental-content">
+                    <div class="parental-header">
+                        <h2>👨‍👩‍👧‍👦 Parental Controls</h2>
+                        <p>Manage your child's gaming experience safely</p>
+                    </div>
+
+                    <div class="control-section">
+                        <h3>🔒 Privacy & Safety</h3>
+                        <div class="control-item">
+                            <label>
+                                <input type="checkbox" checked disabled> Local Storage Only (No External Data)
+                            </label>
+                        </div>
+                        <div class="control-item">
+                            <label>
+                                <input type="checkbox" checked disabled> COPPA Compliant
+                            </label>
+                        </div>
+                        <div class="control-item">
+                            <label>
+                                <input type="checkbox" id="data-collection"> Enable Anonymous Usage Analytics
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="control-section">
+                        <h3>🔊 Audio Controls</h3>
+                        <div class="control-item">
+                            <label>
+                                <input type="checkbox" id="voice-narration" checked> Voice Narration
+                            </label>
+                        </div>
+                        <div class="control-item">
+                            <label>
+                                <input type="checkbox" id="sound-effects" checked> Sound Effects
+                            </label>
+                        </div>
+                        <div class="control-item">
+                            <label>
+                                Voice: <select id="voice-selection">
+                                    <option value="default">Default Child voice</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="control-item">
+                            <label>
+                                Volume: <input type="range" id="volume-control" min="0" max="100" value="70">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="control-section">
+                        <h3>⏰ Time Controls</h3>
+                        <div class="control-item">
+                            <label>
+                                Daily Play Time Limit:
+                                <select id="time-limit">
+                                    <option value="30">30 minutes</option>
+                                    <option value="60" selected>1 hour</option>
+                                    <option value="90">1.5 hours</option>
+                                    <option value="120">2 hours</option>
+                                    <option value="unlimited">Unlimited</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="control-item">
+                            <p>Today's Play Time: <span id="today-play-time">23 minutes</span></p>
+                        </div>
+                    </div>
+
+                    <div class="control-section">
+                        <h3>🗑️ Data Management</h3>
+                        <button class="danger-btn" onclick="clearAllData()">Clear All Game Data</button>
+                        <p class="warning-text">⚠️ This will delete all progress and characters</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="game-footer">
+            <p>Safe • Educational • Fun for Ages 5-9</p>
+            <p>© 2025 Interactive Kids Stories | <a href="#privacy" onclick="showPrivacyPolicy()">Privacy Policy</a></p>
+        </footer>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div id="privacy-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closePrivacyModal()">&times;</span>
+            <h2>Privacy Policy for Children</h2>
+            <div class="privacy-content">
+                <h3>🛡️ Your Privacy is Protected</h3>
+                <ul>
+                    <li>✅ No personal information collected</li>
+                    <li>✅ All data stays on your device</li>
+                    <li>✅ No external tracking or cookies</li>
+                    <li>✅ COPPA compliant design</li>
+                    <li>✅ Parents control all settings</li>
+                </ul>
+
+                <h3>📱 What We Store Locally</h3>
+                <ul>
+                    <li>Game progress and story choices</li>
+                    <li>Created characters and customizations</li>
+                    <li>Parental control settings</li>
+                    <li>Audio and accessibility preferences</li>
+                </ul>
+
+                <p><strong>Parents:</strong> You can delete all data anytime using Parental Controls.</p>
+            </div>
+            <button onclick="closePrivacyModal()" class="modal-btn">I Understand</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+    <script src="audio-helpers.js"></script>
+</body>
+
+</html>
