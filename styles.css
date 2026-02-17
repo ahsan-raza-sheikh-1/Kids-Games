@@ -900,3 +900,139 @@ select:focus {
         border: 1px solid #000;
     }
 }
+
+/* Mini-Games Styles */
+.mini-game-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    backdrop-filter: blur(5px);
+}
+
+.mini-game-content {
+    background: var(--card-bg);
+    border-radius: var(--border-radius-medium);
+    padding: 2.5rem;
+    max-width: 95%;
+    max-height: 95%;
+    overflow-y: auto;
+    text-align: center;
+    box-shadow: var(--shadow-pop);
+    border: 6px solid white;
+    position: relative;
+}
+
+.mini-game-content h2 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 2rem;
+}
+
+.counting-area {
+    position: relative;
+    height: 300px;
+    background: #f0f8ff;
+    border-radius: 15px;
+    margin: 1.5rem 0;
+    border: 2px dashed var(--secondary-color);
+}
+
+.number-buttons {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 1.5rem 0;
+}
+
+.number-btn {
+    background: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.number-btn:hover {
+    background: var(--primary-color);
+    transform: scale(1.15) rotate(5deg);
+}
+
+.memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.2rem;
+    margin: 1.5rem auto;
+    max-width: 500px;
+}
+
+.memory-card {
+    aspect-ratio: 1;
+    background: var(--primary-color);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 6px 15px rgba(255, 94, 120, 0.2);
+}
+
+.memory-card:hover {
+    transform: scale(1.08);
+}
+
+.memory-card.matched {
+    background: var(--happy-green);
+    cursor: not-allowed;
+    transform: scale(0.95);
+    opacity: 0.8;
+}
+
+.close-mini-game {
+    background: #EF5350;
+    color: white;
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: var(--border-radius-medium);
+    cursor: pointer;
+    margin-top: 1.5rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.close-mini-game:hover {
+    background: #d32f2f;
+    transform: translateY(-2px);
+}
+
+.sudoku-grid {
+    margin: 1.5rem auto;
+    border: 3px solid var(--secondary-color);
+    padding: 5px;
+    background: white;
+}
+
+.ttt-board {
+    margin: 1.5rem auto;
+}
+
+.chess-board, .checkers-board {
+    margin: 1.5rem auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
