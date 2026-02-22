@@ -691,6 +691,9 @@ function startMiniGame(gameType) {
         case 'checkers':
             startCheckersGame();
             break;
+        case 'snake':
+            startSnakeGame();
+            break;
         default:
             alert('🎮 This mini-game is coming soon!');
     }
@@ -1215,18 +1218,40 @@ function checkMusicPattern() {
 function startDrawingGame() {
     let gameHtml = `
         <div class="mini-game-overlay">
-            <div class="mini-game-content">
-                <h2>🎨 Drawing Game</h2>
-                <p>Draw your favorite animal or shape!</p>
-                <canvas id="drawing-canvas" width="400" height="300" style="border: 2px solid #4ECDC4; border-radius: 10px; background: white;"></canvas>
-                <div class="drawing-controls">
-                    <button onclick="changeDrawingColor('red')" style="background: red; width: 40px; height: 40px; margin: 5px; border: none; border-radius: 50%;"></button>
-                    <button onclick="changeDrawingColor('blue')" style="background: blue; width: 40px; height: 40px; margin: 5px; border: none; border-radius: 50%;"></button>
-                    <button onclick="changeDrawingColor('green')" style="background: green; width: 40px; height: 40px; margin: 5px; border: none; border-radius: 50%;"></button>
-                    <button onclick="changeDrawingColor('yellow')" style="background: yellow; width: 40px; height: 40px; margin: 5px; border: none; border-radius: 50%;"></button>
-                    <button onclick="clearDrawing()" style="margin: 10px; padding: 10px;">🗑️ Clear</button>
+            <div class="mini-game-content" style="max-width: 800px; width: 95%;">
+                <h2>🎨 Drawing & Coloring Fun</h2>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin-bottom: 15px;">
+                    <div style="flex: 1; min-width: 300px;">
+                        <canvas id="drawing-canvas" width="400" height="300" style="border: 3px solid #4ECDC4; border-radius: 12px; background: white; width: 100%; height: auto; cursor: crosshair;"></canvas>
+                    </div>
+                    <div class="drawing-controls" style="display: flex; flex-direction: column; gap: 10px; align-items: flex-start; min-width: 150px;">
+                        <div style="width: 100%;">
+                            <p style="margin: 0 0 5px 0; font-weight: bold;">Tools:</p>
+                            <div style="display: flex; gap: 10px;">
+                                <button id="brush-tool" onclick="setDrawingTool('brush')" style="padding: 10px; border-radius: 8px; border: 2px solid #4ECDC4; background: #FFD93D; cursor: pointer;">🖌️ Brush</button>
+                                <button id="fill-tool" onclick="setDrawingTool('fill')" style="padding: 10px; border-radius: 8px; border: 2px solid #4ECDC4; background: white; cursor: pointer;">🪣 Fill</button>
+                            </div>
+                        </div>
+                        <div style="width: 100%;">
+                            <p style="margin: 10px 0 5px 0; font-weight: bold;">Colors:</p>
+                            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;" id="color-palette">
+                            </div>
+                        </div>
+                        <div style="width: 100%;">
+                            <p style="margin: 10px 0 5px 0; font-weight: bold;">Outlines:</p>
+                            <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                                <button onclick="loadOutline('none')" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc; background: white; cursor: pointer;">None</button>
+                                <button onclick="loadOutline('cat')" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc; background: white; cursor: pointer;">🐱 Cat</button>
+                                <button onclick="loadOutline('fish')" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc; background: white; cursor: pointer;">🐟 Fish</button>
+                                <button onclick="loadOutline('star')" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc; background: white; cursor: pointer;">⭐ Star</button>
+                            </div>
+                        </div>
+                        <div style="width: 100%; display: flex; gap: 10px; margin-top: 10px;">
+                            <button onclick="clearDrawing()" style="padding: 10px; flex: 1; border-radius: 8px; border: none; background: #FF6B6B; color: white; cursor: pointer; font-weight: bold;">🗑️ Clear</button>
+                            <button onclick="closeMiniGame()" style="padding: 10px; flex: 1; border-radius: 8px; border: none; background: #666; color: white; cursor: pointer; font-weight: bold;">❌ Exit</button>
+                        </div>
+                    </div>
                 </div>
-                <button class="close-mini-game" onclick="closeMiniGame()">❌ Close Game</button>
             </div>
         </div>
     `;
@@ -1237,47 +1262,168 @@ function startDrawingGame() {
     const canvas = document.getElementById('drawing-canvas');
     const ctx = canvas.getContext('2d');
     let isDrawing = false;
-    let currentColor = 'black';
+    let currentColor = '#000000';
+    let currentTool = 'brush'; // 'brush' or 'fill'
     
-    canvas.addEventListener('mousedown', startDrawing);
+    // Setup color palette
+    const colors = ['#000000', '#FF0000', '#0000FF', '#008000', '#FFFF00', '#FFA500', '#800080', '#FFC0CB', '#A52A2A', '#808080', '#4ECDC4', '#FF6B6B'];
+    const palette = document.getElementById('color-palette');
+    colors.forEach(color => {
+        const btn = document.createElement('button');
+        btn.style.background = color;
+        btn.style.width = '30px';
+        btn.style.height = '30px';
+        btn.style.border = '2px solid transparent';
+        btn.style.borderRadius = '5px';
+        btn.style.cursor = 'pointer';
+        btn.onclick = () => changeDrawingColor(color, btn);
+        if (color === '#000000') btn.style.borderColor = '#4ECDC4';
+        palette.appendChild(btn);
+    });
+
+    canvas.addEventListener('mousedown', (e) => {
+        if (currentTool === 'fill') {
+            floodFill(e);
+        } else {
+            startDrawing(e);
+        }
+    });
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseleave', stopDrawing);
     
     function startDrawing(e) {
         isDrawing = true;
-        draw(e);
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        ctx.beginPath();
+        ctx.moveTo((e.clientX - rect.left) * scaleX, (e.clientY - rect.top) * scaleY);
     }
     
     function draw(e) {
-        if (!isDrawing) return;
-        
+        if (!isDrawing || currentTool !== 'brush') return;
         const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const x = (e.clientX - rect.left) * scaleX;
+        const y = (e.clientY - rect.top) * scaleY;
         
         ctx.lineWidth = 5;
         ctx.lineCap = 'round';
         ctx.strokeStyle = currentColor;
-        
         ctx.lineTo(x, y);
         ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(x, y);
     }
     
     function stopDrawing() {
-        if (!isDrawing) return;
         isDrawing = false;
-        ctx.beginPath();
+        ctx.closePath();
     }
     
-    window.changeDrawingColor = function(color) {
+    window.setDrawingTool = function(tool) {
+        currentTool = tool;
+        document.getElementById('brush-tool').style.background = tool === 'brush' ? '#FFD93D' : 'white';
+        document.getElementById('fill-tool').style.background = tool === 'fill' ? '#FFD93D' : 'white';
+    };
+
+    window.changeDrawingColor = function(color, btn) {
         currentColor = color;
+        document.querySelectorAll('#color-palette button').forEach(b => b.style.borderColor = 'transparent');
+        if (btn) btn.style.borderColor = '#4ECDC4';
     };
     
     window.clearDrawing = function() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     };
+
+    window.loadOutline = function(type) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        
+        if (type === 'cat') {
+            // Simple cat outline
+            ctx.arc(200, 150, 60, 0, Math.PI * 2); // Head
+            ctx.moveTo(160, 110); ctx.lineTo(150, 70); ctx.lineTo(180, 95); // Left ear
+            ctx.moveTo(240, 110); ctx.lineTo(250, 70); ctx.lineTo(220, 95); // Right ear
+            ctx.moveTo(180, 140); ctx.arc(180, 140, 5, 0, Math.PI * 2); // Left eye
+            ctx.moveTo(220, 140); ctx.arc(220, 140, 5, 0, Math.PI * 2); // Right eye
+            ctx.moveTo(200, 160); ctx.lineTo(190, 170); ctx.lineTo(210, 170); ctx.closePath(); // Nose
+        } else if (type === 'fish') {
+            // Simple fish outline
+            ctx.ellipse(200, 150, 80, 50, 0, 0, Math.PI * 2); // Body
+            ctx.moveTo(125, 150); ctx.lineTo(90, 120); ctx.lineTo(90, 180); ctx.closePath(); // Tail
+            ctx.moveTo(240, 140); ctx.arc(240, 140, 5, 0, Math.PI * 2); // Eye
+        } else if (type === 'star') {
+            // Star outline
+            const cx = 200, cy = 150, spikes = 5, outerRadius = 80, innerRadius = 40;
+            let rot = Math.PI / 2 * 3, x = cx, y = cy, step = Math.PI / spikes;
+            ctx.moveTo(cx, cy - outerRadius);
+            for (let i = 0; i < spikes; i++) {
+                x = cx + Math.cos(rot) * outerRadius;
+                y = cy + Math.sin(rot) * outerRadius;
+                ctx.lineTo(x, y);
+                rot += step;
+                x = cx + Math.cos(rot) * innerRadius;
+                y = cy + Math.sin(rot) * innerRadius;
+                ctx.lineTo(x, y);
+                rot += step;
+            }
+            ctx.lineTo(cx, cy - outerRadius);
+            ctx.closePath();
+        }
+        ctx.stroke();
+    };
+
+    function floodFill(e) {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const startX = Math.round((e.clientX - rect.left) * scaleX);
+        const startY = Math.round((e.clientY - rect.top) * scaleY);
+
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const pixelData = imageData.data;
+        const startPos = (startY * canvas.width + startX) * 4;
+        
+        const startR = pixelData[startPos];
+        const startG = pixelData[startPos + 1];
+        const startB = pixelData[startPos + 2];
+        const startA = pixelData[startPos + 3];
+
+        const fillColor = hexToRgb(currentColor);
+        
+        // Don't fill if same color
+        if (startR === fillColor.r && startG === fillColor.g && startB === fillColor.b && startA === 255) return;
+
+        const stack = [[startX, startY]];
+        while (stack.length > 0) {
+            const [x, y] = stack.pop();
+            const pos = (y * canvas.width + x) * 4;
+
+            if (x < 0 || x >= canvas.width || y < 0 || y >= canvas.height) continue;
+            if (pixelData[pos] !== startR || pixelData[pos+1] !== startG || pixelData[pos+2] !== startB || pixelData[pos+3] !== startA) continue;
+
+            pixelData[pos] = fillColor.r;
+            pixelData[pos + 1] = fillColor.g;
+            pixelData[pos + 2] = fillColor.b;
+            pixelData[pos + 3] = 255;
+
+            stack.push([x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]);
+        }
+        ctx.putImageData(imageData, 0, 0);
+    }
+
+    function hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : { r: 0, g: 0, b: 0 };
+    }
 }
 
 function startMazeGame() {
@@ -1765,34 +1911,41 @@ let sudokuState = {
     hintsLeft: 3
 };
 
-function startSudokuGame() {
-    sudokuState.difficulty = '4x4';
+function startSudokuGame(difficulty = null) {
+    if (difficulty) sudokuState.difficulty = difficulty;
     sudokuState.hintsLeft = 3;
     generateSudoku();
     
+    let size = sudokuState.difficulty === '6x6' ? 6 : (sudokuState.difficulty === '9x9' ? 9 : 4);
+    
     let gameHtml = `
         <div class="mini-game-overlay">
-            <div class="mini-game-content" style="max-width: 500px;">
+            <div class="mini-game-content" style="max-width: 600px; width: 95%;">
                 <h2>🔢 Sudoku Puzzle</h2>
-                <p>Fill each row and column with numbers 1-4!</p>
-                <div class="sudoku-info" style="margin-bottom: 1rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 5px;">
-                    <span>💡 Hints left: <strong>${sudokuState.hintsLeft}</strong></span>
-                    <div>
-                        <button onclick="setSudokuDifficulty('4x4')" style="padding: 0.3rem 0.6rem; background: ${sudokuState.difficulty === '4x4' ? '#FF6B6B' : '#4ECDC4'}; color: white; border: none; border-radius: 8px; cursor: pointer;">4x4</button>
-                        <button onclick="setSudokuDifficulty('6x6')" style="padding: 0.3rem 0.6rem; background: ${sudokuState.difficulty === '6x6' ? '#FF6B6B' : '#4ECDC4'}; color: white; border: none; border-radius: 8px; cursor: pointer;">6x6</button>
-                        <button onclick="setSudokuDifficulty('9x9')" style="padding: 0.3rem 0.6rem; background: ${sudokuState.difficulty === '9x9' ? '#FF6B6B' : '#4ECDC4'}; color: white; border: none; border-radius: 8px; cursor: pointer;">9x9</button>
+                <p>Fill each row and column with numbers 1-${size}!</p>
+                <div class="sudoku-info" style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <span style="background: #f0f8ff; padding: 5px 10px; border-radius: 20px; font-weight: bold;">💡 Hints: ${sudokuState.hintsLeft}</span>
+                    <div style="display: flex; gap: 5px;">
+                        <button onclick="setSudokuDifficulty('4x4')" style="padding: 0.4rem 0.8rem; background: ${sudokuState.difficulty === '4x4' ? '#FF6B6B' : '#4ECDC4'}; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s;">4x4</button>
+                        <button onclick="setSudokuDifficulty('6x6')" style="padding: 0.4rem 0.8rem; background: ${sudokuState.difficulty === '6x6' ? '#FF6B6B' : '#4ECDC4'}; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s;">6x6</button>
+                        <button onclick="setSudokuDifficulty('9x9')" style="padding: 0.4rem 0.8rem; background: ${sudokuState.difficulty === '9x9' ? '#FF6B6B' : '#4ECDC4'}; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s;">9x9</button>
                     </div>
                 </div>
-                <div id="sudoku-grid" class="sudoku-grid">
+                <div id="sudoku-grid" class="sudoku-grid" style="margin-bottom: 1.5rem;">
                 </div>
-                <div style="margin-top: 1rem; display: flex; gap: 0.5rem; justify-content: center;">
-                    <button onclick="getSudokuHint()" class="control-btn" style="background: #FFA726;">💡 Get Hint</button>
-                    <button onclick="checkSudokuSolution()" class="control-btn primary">✅ Check</button>
+                <div id="sudoku-numpad" style="display: none; margin-bottom: 1rem; justify-content: center; flex-wrap: wrap; gap: 8px; background: #f9f9f9; padding: 15px; border-radius: 12px; border: 2px dashed #4ECDC4;">
                 </div>
-                <button class="close-mini-game" onclick="closeMiniGame()">❌ Close Game</button>
+                <div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: center;">
+                    <button onclick="getSudokuHint()" class="control-btn" style="background: #FFA726; flex: 1; max-width: 150px;">💡 Hint</button>
+                    <button onclick="checkSudokuSolution()" class="control-btn primary" style="flex: 1; max-width: 150px;">✅ Check</button>
+                </div>
+                <button class="close-mini-game" onclick="closeMiniGame()" style="margin-top: 1.5rem;">❌ Close Game</button>
             </div>
         </div>
     `;
+    
+    const existingOverlay = document.querySelector('.mini-game-overlay');
+    if (existingOverlay) existingOverlay.remove();
     
     document.body.insertAdjacentHTML('beforeend', gameHtml);
     renderSudokuGrid();
@@ -1800,26 +1953,39 @@ function startSudokuGame() {
 
 function generateSudoku() {
     let size = sudokuState.difficulty === '6x6' ? 6 : (sudokuState.difficulty === '9x9' ? 9 : 4);
-    let boxSize = size === 4 ? 2 : 3;
+    let boxRows = size === 4 ? 2 : (size === 6 ? 2 : 3);
+    let boxCols = size === 4 ? 2 : (size === 6 ? 3 : 3);
     
     sudokuState.grid = [];
     sudokuState.solution = [];
     
+    // Simple but valid pattern generation
     for (let i = 0; i < size; i++) {
         sudokuState.solution[i] = [];
         for (let j = 0; j < size; j++) {
-            sudokuState.solution[i][j] = ((i * boxSize + Math.floor(i / boxSize) + j) % size) + 1;
+            sudokuState.solution[i][j] = ((i * boxCols + Math.floor(i / boxRows) + j) % size) + 1;
         }
     }
     
-    for (let i = 0; i < size; i += boxSize) {
-        let rows = Array.from({length: boxSize}, (_, k) => i + k);
-        rows.sort(() => Math.random() - 0.5);
-        let temp = rows.map(r => [...sudokuState.solution[r]]);
-        rows.forEach((r, idx) => sudokuState.solution[r] = temp[idx]);
+    // Randomize rows within blocks
+    for (let i = 0; i < size; i += boxRows) {
+        let blockRows = Array.from({length: boxRows}, (_, k) => i + k);
+        blockRows.sort(() => Math.random() - 0.5);
+        let temp = blockRows.map(r => [...sudokuState.solution[r]]);
+        blockRows.forEach((r, idx) => sudokuState.solution[r] = temp[idx]);
+    }
+    
+    // Randomize columns within blocks
+    for (let j = 0; j < size; j += boxCols) {
+        let blockCols = Array.from({length: boxCols}, (_, k) => j + k);
+        blockCols.sort(() => Math.random() - 0.5);
+        for (let i = 0; i < size; i++) {
+            let temp = blockCols.map(c => sudokuState.solution[i][c]);
+            blockCols.forEach((c, idx) => sudokuState.solution[i][c] = temp[idx]);
+        }
     }
 
-    const fillPercent = sudokuState.difficulty === '9x9' ? 0.35 : 0.6;
+    const fillPercent = sudokuState.difficulty === '9x9' ? 0.3 : (sudokuState.difficulty === '6x6' ? 0.45 : 0.6);
     for (let i = 0; i < size; i++) {
         sudokuState.grid[i] = [];
         for (let j = 0; j < size; j++) {
@@ -1833,34 +1999,45 @@ function renderSudokuGrid() {
     if (!container) return;
     
     let size = sudokuState.difficulty === '6x6' ? 6 : (sudokuState.difficulty === '9x9' ? 9 : 4);
-    let cellSize = size === 4 ? '60px' : (size === 6 ? '45px' : '35px');
+    let boxRows = size === 4 ? 2 : (size === 6 ? 2 : 3);
+    let boxCols = size === 4 ? 2 : (size === 6 ? 3 : 3);
+    
+    let cellSize = size === 4 ? '70px' : (size === 6 ? '55px' : '40px');
     
     container.style.display = 'grid';
     container.style.gridTemplateColumns = `repeat(${size}, ${cellSize})`;
     container.style.gap = '2px';
     container.style.margin = '0 auto';
     container.style.width = 'fit-content';
+    container.style.padding = '5px';
+    container.style.background = '#4ECDC4';
+    container.style.borderRadius = '10px';
+    container.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
     
     container.innerHTML = '';
     
     for (let i = 0; i < size; i++) {
         for (let j = 0; j < size; j++) {
             const cell = document.createElement('div');
+            cell.id = `sudoku-cell-${i}-${j}`;
             cell.style.width = cellSize;
             cell.style.height = cellSize;
-            cell.style.border = '2px solid #4ECDC4';
-            cell.style.borderRadius = '5px';
+            cell.style.background = sudokuState.grid[i][j] !== 0 ? '#f0f0f0' : 'white';
             cell.style.display = 'flex';
             cell.style.alignItems = 'center';
             cell.style.justifyContent = 'center';
-            cell.style.fontSize = size === 9 ? '1.1rem' : '1.5rem';
+            cell.style.fontSize = size === 9 ? '1.2rem' : '1.8rem';
             cell.style.fontWeight = 'bold';
             cell.style.cursor = 'pointer';
-            cell.style.background = sudokuState.grid[i][j] !== 0 ? '#f0f0f0' : 'white';
+            cell.style.transition = 'all 0.2s';
+            
+            // Add block borders
+            if (j % boxCols === 0 && j !== 0) cell.style.borderLeft = '3px solid #4ECDC4';
+            if (i % boxRows === 0 && i !== 0) cell.style.borderTop = '3px solid #4ECDC4';
             
             if (sudokuState.grid[i][j] !== 0) {
                 cell.textContent = sudokuState.grid[i][j];
-                cell.style.color = '#666';
+                cell.style.color = '#555';
             } else {
                 cell.onclick = () => selectSudokuCell(i, j, cell);
             }
@@ -1871,16 +2048,62 @@ function renderSudokuGrid() {
 }
 
 function selectSudokuCell(row, col, cellElement) {
-    const size = sudokuState.difficulty === '4x4' ? 4 : (sudokuState.difficulty === '6x6' ? 6 : 9);
-    const choice = prompt(`Enter a number (1-${size}):`);
-    const num = parseInt(choice);
+    // Reveal numpad
+    const numpad = document.getElementById('sudoku-numpad');
+    if (!numpad) return;
     
-    if (num >= 1 && num <= size) {
-        sudokuState.grid[row][col] = num;
-        cellElement.textContent = num;
-        cellElement.style.color = '#FF6B6B';
-        cellElement.style.background = '#fff9f0';
+    numpad.style.display = 'flex';
+    numpad.innerHTML = '';
+    
+    let size = sudokuState.difficulty === '6x6' ? 6 : (sudokuState.difficulty === '9x9' ? 9 : 4);
+    
+    // Highlight selected cell
+    document.querySelectorAll('.sudoku-grid div').forEach(c => {
+        if (c.textContent === '' || c.style.color === 'rgb(255, 107, 107)') {
+            c.style.background = 'white';
+        }
+    });
+    cellElement.style.background = '#FFD93D';
+    
+    for (let i = 1; i <= size; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = i;
+        btn.style.padding = '10px 15px';
+        btn.style.fontSize = '1.2rem';
+        btn.style.fontWeight = 'bold';
+        btn.style.border = 'none';
+        btn.style.borderRadius = '8px';
+        btn.style.background = '#4ECDC4';
+        btn.style.color = 'white';
+        btn.style.cursor = 'pointer';
+        btn.onclick = () => {
+            sudokuState.grid[row][col] = i;
+            cellElement.textContent = i;
+            cellElement.style.color = '#FF6B6B';
+            cellElement.style.background = '#fff9f0';
+            numpad.style.display = 'none';
+        };
+        numpad.appendChild(btn);
     }
+    
+    // Add clear button
+    const clearBtn = document.createElement('button');
+    clearBtn.textContent = '✖';
+    clearBtn.style.padding = '10px 15px';
+    clearBtn.style.fontSize = '1.2rem';
+    clearBtn.style.fontWeight = 'bold';
+    clearBtn.style.border = 'none';
+    clearBtn.style.borderRadius = '8px';
+    clearBtn.style.background = '#FF6B6B';
+    clearBtn.style.color = 'white';
+    clearBtn.style.cursor = 'pointer';
+    clearBtn.onclick = () => {
+        sudokuState.grid[row][col] = 0;
+        cellElement.textContent = '';
+        cellElement.style.background = 'white';
+        numpad.style.display = 'none';
+    };
+    numpad.appendChild(clearBtn);
 }
 
 function getSudokuHint() {
@@ -1889,7 +2112,7 @@ function getSudokuHint() {
         return;
     }
     
-    const size = sudokuState.difficulty === '4x4' ? 4 : (sudokuState.difficulty === '6x6' ? 6 : 9);
+    let size = sudokuState.difficulty === '6x6' ? 6 : (sudokuState.difficulty === '9x9' ? 9 : 4);
     const emptyCells = [];
     
     for (let i = 0; i < size; i++) {
@@ -1904,9 +2127,11 @@ function getSudokuHint() {
         const [row, col] = emptyCells[Math.floor(Math.random() * emptyCells.length)];
         sudokuState.grid[row][col] = sudokuState.solution[row][col];
         sudokuState.hintsLeft--;
-        const overlay = document.querySelector('.mini-game-overlay');
-        if (overlay) overlay.remove();
-        startSudokuGame();
+        renderSudokuGrid();
+        
+        // Update hint display without re-rendering everything
+        const hintDisplay = document.querySelector('.sudoku-info span strong');
+        if (hintDisplay) hintDisplay.textContent = sudokuState.hintsLeft;
     }
 }
 
@@ -1935,9 +2160,7 @@ function checkSudokuSolution() {
 function setSudokuDifficulty(diff) {
     sudokuState.difficulty = diff;
     sudokuState.hintsLeft = 3;
-    const overlay = document.querySelector('.mini-game-overlay');
-    if (overlay) overlay.remove();
-    startSudokuGame();
+    startSudokuGame(diff);
 }
 
 // ====================
@@ -2767,3 +2990,163 @@ setTimeout(() => {
 console.log('🎮 Interactive Kids Storytelling Game loaded successfully!');
 console.log('✅ COPPA Compliant - Privacy Protected');
 console.log('🛡️ Local Storage sync enabled');
+
+// ====================
+// SNAKE GAME (Classic Nokia Style)
+// ====================
+function startSnakeGame() {
+    let gameHtml = `
+        <div class="mini-game-overlay">
+            <div class="mini-game-content" style="max-width: 500px; background: #2d3436; color: #fff; border: 8px solid #636e72; border-radius: 20px;">
+                <h2 style="color: #55efc4; font-family: 'Courier New', Courier, monospace;">🐍 CLASSIC SNAKE</h2>
+                <div style="background: #95afc0; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
+                    <span id="snake-score" style="color: #2d3436; font-weight: bold; font-family: 'Courier New', sans-serif;">Score: 0</span>
+                </div>
+                <canvas id="snake-canvas" width="300" height="300" style="background: #badc58; border: 4px solid #535c68; display: block; margin: 0 auto; image-rendering: pixelated;"></canvas>
+                
+                <div class="snake-controls" style="margin-top: 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 200px; margin-left: auto; margin-right: auto;">
+                    <div></div>
+                    <button onclick="changeSnakeDirection('up')" style="padding: 15px; background: #636e72; color: white; border: none; border-radius: 10px; font-size: 1.5rem; cursor: pointer;">⬆️</button>
+                    <div></div>
+                    <button onclick="changeSnakeDirection('left')" style="padding: 15px; background: #636e72; color: white; border: none; border-radius: 10px; font-size: 1.5rem; cursor: pointer;">⬅️</button>
+                    <button onclick="changeSnakeDirection('down')" style="padding: 15px; background: #636e72; color: white; border: none; border-radius: 10px; font-size: 1.5rem; cursor: pointer;">⬇️</button>
+                    <button onclick="changeSnakeDirection('right')" style="padding: 15px; background: #636e72; color: white; border: none; border-radius: 10px; font-size: 1.5rem; cursor: pointer;">➡️</button>
+                </div>
+                
+                <p style="margin-top: 20px; font-size: 0.9rem; color: #dfe6e9;">Use arrows or buttons to play!</p>
+                <button class="close-mini-game" onclick="stopSnakeGame()" style="margin-top: 10px; background: #ff7675; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">❌ Exit Game</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', gameHtml);
+    
+    const canvas = document.getElementById('snake-canvas');
+    const ctx = canvas.getContext('2d');
+    const grid = 20;
+    let count = 0;
+    let score = 0;
+    
+    let snake = {
+        x: 160,
+        y: 160,
+        dx: grid,
+        dy: 0,
+        cells: [],
+        maxCells: 4
+    };
+    
+    let apple = {
+        x: 320,
+        y: 320
+    };
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    function resetApple() {
+        apple.x = getRandomInt(0, 15) * grid;
+        apple.y = getRandomInt(0, 15) * grid;
+    }
+    
+    resetApple();
+
+    function loop() {
+        if (window.snakeGamePaused) return;
+        requestAnimationFrame(loop);
+
+        // Slow game loop to 15 fps
+        if (++count < 6) return;
+        count = 0;
+
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        // Move snake
+        snake.x += snake.dx;
+        snake.y += snake.dy;
+
+        // Wrap snake position on edge of screen
+        if (snake.x < 0) snake.x = canvas.width - grid;
+        else if (snake.x >= canvas.width) snake.x = 0;
+        
+        if (snake.y < 0) snake.y = canvas.height - grid;
+        else if (snake.y >= canvas.height) snake.y = 0;
+
+        // Keep track of where snake has been. Front of the array is always the head
+        snake.cells.unshift({x: snake.x, y: snake.y});
+
+        // Remove cells as we move away from them
+        if (snake.cells.length > snake.maxCells) {
+            snake.cells.pop();
+        }
+
+        // Draw apple
+        ctx.fillStyle = '#ff4757';
+        ctx.fillRect(apple.x, apple.y, grid-1, grid-1);
+
+        // Draw snake
+        ctx.fillStyle = '#2d3436';
+        snake.cells.forEach(function(cell, index) {
+            ctx.fillRect(cell.x, cell.y, grid-1, grid-1);
+
+            // Snake ate apple
+            if (cell.x === apple.x && cell.y === apple.y) {
+                snake.maxCells++;
+                score += 10;
+                document.getElementById('snake-score').textContent = 'Score: ' + score;
+                resetApple();
+                audioManager.playSound('click');
+            }
+
+            // Check collision with all cells after this one (modified bubble sort)
+            for (let i = index + 1; i < snake.cells.length; i++) {
+                // Collision!
+                if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
+                    gameOver();
+                }
+            }
+        });
+    }
+
+    function gameOver() {
+        window.snakeGamePaused = true;
+        alert('💥 Game Over! Your score: ' + score);
+        gameState.addScore(score / 5);
+        stopSnakeGame();
+    }
+
+    window.snakeGamePaused = false;
+    requestAnimationFrame(loop);
+
+    window.changeSnakeDirection = function(dir) {
+        if (dir === 'up' && snake.dy === 0) {
+            snake.dy = -grid;
+            snake.dx = 0;
+        } else if (dir === 'down' && snake.dy === 0) {
+            snake.dy = grid;
+            snake.dx = 0;
+        } else if (dir === 'left' && snake.dx === 0) {
+            snake.dx = -grid;
+            snake.dy = 0;
+        } else if (dir === 'right' && snake.dx === 0) {
+            snake.dx = grid;
+            snake.dy = 0;
+        }
+    };
+
+    // Keyboard support
+    window.snakeKeyHandler = function(e) {
+        if (e.which === 37 && snake.dx === 0) changeSnakeDirection('left');
+        else if (e.which === 38 && snake.dy === 0) changeSnakeDirection('up');
+        else if (e.which === 39 && snake.dx === 0) changeSnakeDirection('right');
+        else if (e.which === 40 && snake.dy === 0) changeSnakeDirection('down');
+    };
+    document.addEventListener('keydown', window.snakeKeyHandler);
+
+    window.stopSnakeGame = function() {
+        window.snakeGamePaused = true;
+        document.removeEventListener('keydown', window.snakeKeyHandler);
+        closeMiniGame();
+    };
+}
