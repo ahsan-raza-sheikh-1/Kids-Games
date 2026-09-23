@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="BrightTrail">
+  <rect width="64" height="64" rx="16" fill="#0c5361"/>
+  <path d="m32 10 5.8 15.2L53 31l-15.2 5.8L32 52l-5.8-15.2L11 31l15.2-5.8L32 10Z" fill="#ffd166"/>
+  <circle cx="32" cy="31" r="5" fill="#fffdf8"/>
+</svg>
