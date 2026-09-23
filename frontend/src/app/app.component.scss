@@ -1,0 +1,137 @@
+:host {
+  display: block;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: 76px;
+  padding: 0 clamp(1rem, 4vw, 4rem);
+  background: rgba(255, 255, 255, 0.92);
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 8px 24px rgba(12, 83, 97, 0.06);
+  backdrop-filter: blur(14px);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.brand-mark {
+  width: 2.65rem;
+  height: 2.65rem;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  color: #fff;
+  background: var(--teal);
+  font-size: 1.45rem;
+  transform: rotate(-8deg);
+}
+
+.brand-copy {
+  display: grid;
+  gap: 0.05rem;
+  line-height: 1;
+}
+
+.brand-copy strong {
+  font-family: var(--display-font);
+  font-size: 1.35rem;
+  letter-spacing: 0;
+}
+
+.brand-copy small {
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.toolbar-nav {
+  display: flex;
+  gap: 0.2rem;
+  margin-left: clamp(1rem, 4vw, 4rem);
+}
+
+.toolbar-nav a {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.toolbar-nav a.active-link {
+  color: var(--teal);
+}
+
+.toolbar-spacer {
+  flex: 1;
+}
+
+.star-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-right: 0.6rem;
+  color: var(--ink);
+  font-weight: 900;
+}
+
+.star-count mat-icon {
+  color: var(--yellow-deep);
+}
+
+.sound-button {
+  color: var(--teal);
+}
+
+.app-main {
+  flex: 1;
+}
+
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem clamp(1rem, 4vw, 4rem);
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.app-footer span:first-child {
+  color: var(--ink);
+  font-family: var(--display-font);
+  font-size: 1rem;
+}
+
+@media (max-width: 640px) {
+  .app-toolbar {
+    height: 68px;
+    padding-inline: 1rem;
+  }
+
+  .toolbar-nav {
+    display: none;
+  }
+
+  .brand-copy small,
+  .app-footer span:last-child {
+    display: none;
+  }
+
+  .app-footer {
+    padding: 1rem;
+  }
+}

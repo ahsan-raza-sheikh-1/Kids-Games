@@ -1,0 +1,68 @@
+<div class="page-wrap home-page">
+  <section class="hero-panel" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <p class="eyebrow">A brighter way to practice</p>
+      <h1 id="hero-title">Big ideas begin with playful steps.</h1>
+      <p class="hero-description">Short, friendly challenges for curious minds. Pick a trail, try a round, and collect a few stars along the way.</p>
+      <div class="hero-actions">
+        <a mat-flat-button color="primary" routerLink="/library">
+          Explore the game shelf
+          <mat-icon iconPositionEnd aria-hidden="true">arrow_forward</mat-icon>
+        </a>
+        <span class="privacy-note"><mat-icon aria-hidden="true">lock</mat-icon> Progress stays on this device</span>
+      </div>
+    </div>
+
+    <div class="hero-art" aria-hidden="true">
+      <div class="orbit orbit-one"></div>
+      <div class="orbit orbit-two"></div>
+      <div class="hero-tile tile-yellow"><span>🌼</span><strong>Count</strong></div>
+      <div class="hero-tile tile-teal"><span>🧠</span><strong>Think</strong></div>
+      <div class="hero-tile tile-coral"><span>🚀</span><strong>Explore</strong></div>
+      <div class="hero-star star-one">✦</div>
+      <div class="hero-star star-two">✧</div>
+    </div>
+  </section>
+
+  <section class="trail-section" aria-labelledby="trail-title">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Choose your trail</p>
+        <h2 id="trail-title">Made for the way you learn.</h2>
+      </div>
+      <p>Two age bands, one calm place to build confidence through little wins.</p>
+    </div>
+
+    <mat-button-toggle-group class="age-toggle" [value]="selectedAgeBand()" (change)="selectAgeBand($event.value)" aria-label="Choose an age band">
+      <mat-button-toggle value="5-10"><span class="toggle-number">5–10</span><span>Build the basics</span></mat-button-toggle>
+      <mat-button-toggle value="10-15"><span class="toggle-number">10–15</span><span>Stretch your thinking</span></mat-button-toggle>
+    </mat-button-toggle-group>
+
+    @if (catalog.loading()) {
+      <div class="loading-state" role="status"><span class="loading-dot"></span> Gathering games...</div>
+    } @else if (catalog.error()) {
+      <div class="empty-state" role="alert">
+        <mat-icon aria-hidden="true">cloud_off</mat-icon>
+        <p>{{ catalog.error() }}</p>
+        <button mat-stroked-button type="button" (click)="catalog.loadGames()">Try again</button>
+      </div>
+    } @else {
+      <div class="game-grid">
+        @for (game of featuredGames(); track game.id) {
+          <kids-game-card [game]="game"></kids-game-card>
+        } @empty {
+          <div class="empty-state"><mat-icon aria-hidden="true">auto_awesome</mat-icon><p>New trails are being planted.</p></div>
+        }
+      </div>
+    }
+  </section>
+
+  <section class="progress-strip" aria-label="Your progress">
+    <div class="progress-icon"><mat-icon aria-hidden="true">stars</mat-icon></div>
+    <div>
+      <p class="eyebrow">Your bright bits</p>
+      <h2>{{ progress.totalStars() }} stars collected</h2>
+    </div>
+    <a mat-button routerLink="/library">Find another challenge <mat-icon iconPositionEnd aria-hidden="true">arrow_forward</mat-icon></a>
+  </section>
+</div>

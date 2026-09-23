@@ -1,0 +1,137 @@
+<div class="page-wrap retro-page">
+  <div class="retro-topline">
+    <a mat-button routerLink="/library"><mat-icon aria-hidden="true">arrow_back</mat-icon> Game shelf</a>
+    <span class="retro-label"><mat-icon aria-hidden="true">sports_esports</mat-icon> Retro room</span>
+  </div>
+
+  <section class="retro-heading" [attr.data-accent]="game().accent">
+    <div class="retro-icon" aria-hidden="true">{{ game().icon }}</div>
+    <div>
+      <p class="eyebrow">{{ game().category }} · Ages {{ game().ageBand }}</p>
+      <h1>{{ game().title }}</h1>
+      <p>{{ game().description }}</p>
+    </div>
+  </section>
+
+  @if (status() === 'won') {
+    <section class="retro-complete" aria-labelledby="retro-complete-title">
+      <div class="retro-complete-mark" aria-hidden="true">✦</div>
+      <p class="eyebrow">Round complete</p>
+      <h2 id="retro-complete-title">You cracked the classic.</h2>
+      <p>{{ game().title }} is now in your collection.</p>
+      <div class="stars" [attr.aria-label]="finalStars() + ' stars earned'">
+        @for (star of [1, 2, 3]; track star) {
+          <mat-icon [class.star-earned]="star <= finalStars()">star</mat-icon>
+        }
+      </div>
+      <div class="retro-actions">
+        <button mat-flat-button color="primary" type="button" (click)="restartGame()">Play again</button>
+        <a mat-stroked-button routerLink="/library">Back to shelf</a>
+      </div>
+    </section>
+  } @else if (status() === 'ready') {
+    <section class="retro-start" aria-labelledby="retro-start-title">
+      <div class="start-symbol" aria-hidden="true">{{ game().icon }}</div>
+      <p class="eyebrow">Classic mode</p>
+      <h2 id="retro-start-title">Ready when you are.</h2>
+      <p>{{ game().skills.join(' · ') }}</p>
+      @if (mode() === 'snake') {
+        <div class="complexity-picker" aria-labelledby="complexity-title">
+          <p id="complexity-title" class="complexity-label">Choose complexity</p>
+          <div class="complexity-options" role="group" aria-label="Choose Snake complexity">
+            @for (option of snakeComplexities(); track option.id) {
+              <button mat-stroked-button type="button" [class.complexity-active]="snakeComplexity() === option.id" (click)="selectSnakeComplexity(option.id)">
+                <strong>Level {{ option.target }}</strong>
+                <span>{{ option.label }}</span>
+                <small>{{ option.description }}</small>
+              </button>
+            }
+          </div>
+        </div>
+      }
+      <button mat-flat-button color="primary" type="button" (click)="beginGame()">
+        Start game
+        <mat-icon iconPositionEnd aria-hidden="true">play_arrow</mat-icon>
+      </button>
+    </section>
+  } @else {
+    @switch (mode()) {
+      @case ('snake') {
+        <section class="retro-card snake-card" aria-labelledby="snake-title">
+          <div class="retro-card-heading">
+            <div><p class="eyebrow">Classic arcade</p><h2 id="snake-title">Guide the snake to {{ snakeTarget() }} treats.</h2></div>
+            <span class="retro-score"><mat-icon aria-hidden="true">star</mat-icon> {{ snakeScore() }} / {{ snakeTarget() }}</span>
+          </div>
+          <div class="snake-board retro-board" [style.--board-size]="boardSize()">
+            @for (index of gridCells(); track index) {
+              <div class="snake-cell" [class.snake-body]="isSnakeCell(index)" [class.snake-head]="isSnakeHead(index)" [class.snake-food]="isSnakeFood(index)"></div>
+            }
+          </div>
+          <div class="d-pad" aria-label="Snake controls">
+            <span></span><button mat-stroked-button type="button" aria-label="Move up" (click)="changeSnakeDirection({ row: -1, col: 0 })"><mat-icon>arrow_upward</mat-icon></button><span></span>
+            <button mat-stroked-button type="button" aria-label="Move left" (click)="changeSnakeDirection({ row: 0, col: -1 })"><mat-icon>arrow_back</mat-icon></button>
+            <button mat-stroked-button type="button" aria-label="Move down" (click)="changeSnakeDirection({ row: 1, col: 0 })"><mat-icon>arrow_downward</mat-icon></button>
+            <button mat-stroked-button type="button" aria-label="Move right" (click)="changeSnakeDirection({ row: 0, col: 1 })"><mat-icon>arrow_forward</mat-icon></button>
+          </div>
+          <p class="retro-tip"><mat-icon aria-hidden="true">keyboard</mat-icon> Use the arrow keys or the controls.</p>
+        </section>
+      }
+      @case ('mines') {
+        <section class="retro-card mines-card" aria-labelledby="mines-title">
+          <div class="retro-card-heading">
+            <div><p class="eyebrow">Careful explorer</p><h2 id="mines-title">Clear the garden without waking a mine.</h2></div>
+            <span class="retro-score"><mat-icon aria-hidden="true">flag</mat-icon> {{ minesRemaining() }} left</span>
+          </div>
+          <div class="mines-toolbar">
+            <button mat-stroked-button type="button" [class.mode-active]="mineFlagMode()" (click)="toggleMineFlagMode()">
+              <mat-icon>{{ mineFlagMode() ? 'touch_app' : 'flag' }}</mat-icon>{{ mineFlagMode() ? 'Flag mode on' : 'Flag a mine' }}
+            </button>
+            <span>Find {{ mineCount() }} hidden mines</span>
+          </div>
+          <div class="mine-board retro-board" [style.--board-size]="boardSize()" role="grid" aria-label="Minesweeper board">
+            @for (index of gridCells(); track index) {
+              <button class="mine-cell" type="button" role="gridcell" [class.mine-revealed]="mineCell(index).revealed" [class.mine-flagged]="mineCell(index).flagged" [class.mine-hit]="mineCell(index).mine && mineCell(index).revealed" [attr.aria-label]="mineCellLabel(index)" (click)="handleMineCell(index)">{{ mineCellDisplay(index) }}</button>
+            }
+          </div>
+          <p class="retro-tip"><mat-icon aria-hidden="true">lightbulb</mat-icon> Reveal a safe patch to open nearby cells.</p>
+        </section>
+      }
+      @case ('chess') {
+        <section class="retro-card board-card" aria-labelledby="chess-title">
+          <div class="retro-card-heading">
+            <div><p class="eyebrow">Think ahead</p><h2 id="chess-title">Capture the computer king.</h2></div>
+            <span class="turn-chip" [class.computer-turn]="chessTurn() === 'black'"><mat-icon aria-hidden="true">{{ chessTurn() === 'white' ? 'person' : 'smart_toy' }}</mat-icon> {{ chessTurn() === 'white' ? 'Your turn' : 'Computer thinking' }}</span>
+          </div>
+          <div class="board-grid retro-board chess-board" role="grid" aria-label="Chess board">
+            @for (index of gridCells(); track index) {
+              <button class="board-cell" type="button" role="gridcell" [class.board-dark]="isDarkCell(index)" [class.board-selected]="isChessSelected(rowFromIndex(index), colFromIndex(index))" [class.board-move]="isChessMove(rowFromIndex(index), colFromIndex(index))" [attr.aria-label]="chessCellLabel(rowFromIndex(index), colFromIndex(index))" (click)="handleChessCell(rowFromIndex(index), colFromIndex(index))">{{ chessPieceAt(rowFromIndex(index), colFromIndex(index)) }}</button>
+            }
+          </div>
+          <p class="retro-tip"><mat-icon aria-hidden="true">touch_app</mat-icon> Select a piece, then choose a glowing square.</p>
+        </section>
+      }
+      @case ('checkers') {
+        <section class="retro-card board-card" aria-labelledby="checkers-title">
+          <div class="retro-card-heading">
+            <div><p class="eyebrow">Jump and plan</p><h2 id="checkers-title">Take every black piece.</h2></div>
+            <span class="turn-chip" [class.computer-turn]="checkersTurn() === 'black'"><mat-icon aria-hidden="true">{{ checkersTurn() === 'red' ? 'person' : 'smart_toy' }}</mat-icon> {{ checkersTurn() === 'red' ? 'Your turn' : 'Computer thinking' }}</span>
+          </div>
+          <div class="board-grid retro-board checkers-board" role="grid" aria-label="Checkers board">
+            @for (index of gridCells(); track index) {
+              <button class="board-cell checkers-cell" type="button" role="gridcell" [class.board-dark]="isDarkCell(index)" [class.board-selected]="isCheckersSelected(rowFromIndex(index), colFromIndex(index))" [class.board-move]="isCheckersMove(rowFromIndex(index), colFromIndex(index))" [class.red-piece]="isCheckersRedPiece(rowFromIndex(index), colFromIndex(index))" [class.black-piece]="isCheckersBlackPiece(rowFromIndex(index), colFromIndex(index))" [attr.aria-label]="checkersCellLabel(rowFromIndex(index), colFromIndex(index))" (click)="handleCheckersCell(rowFromIndex(index), colFromIndex(index))">{{ checkersPieceAt(rowFromIndex(index), colFromIndex(index)) }}</button>
+            }
+          </div>
+          <p class="retro-tip"><mat-icon aria-hidden="true">touch_app</mat-icon> Move on dark squares. Jump over a piece to capture it.</p>
+        </section>
+      }
+    }
+
+    @if (status() === 'lost') {
+      <div class="retro-feedback" role="status">
+        <mat-icon aria-hidden="true">refresh</mat-icon>
+        <div><strong>That round got tricky.</strong><span>Reset the board and try a new path.</span></div>
+        <button mat-flat-button color="primary" type="button" (click)="restartGame()">Try again</button>
+      </div>
+    }
+  }
+</div>

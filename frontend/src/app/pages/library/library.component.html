@@ -1,0 +1,56 @@
+<div class="page-wrap library-page">
+  <section class="library-heading" aria-labelledby="library-title">
+    <div>
+      <p class="eyebrow">The game shelf</p>
+      <h1 id="library-title">Find your next bright idea.</h1>
+      <p>Choose a trail by age, subject, or the skill you want to practice today.</p>
+    </div>
+    <div class="shelf-mark" aria-hidden="true">✦</div>
+  </section>
+
+  <section class="filters" aria-label="Game filters">
+    <mat-form-field class="search-field" appearance="outline">
+      <mat-label>Search the shelf</mat-label>
+      <mat-icon matPrefix aria-hidden="true">search</mat-icon>
+      <input matInput [value]="searchTerm()" (input)="setSearchTerm($event)" autocomplete="off">
+      @if (searchTerm()) {
+        <button mat-icon-button matSuffix type="button" aria-label="Clear search" (click)="searchTerm.set('')">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+
+    <mat-button-toggle-group [value]="selectedAgeBand()" (change)="selectAgeBand($event.value)" aria-label="Filter by age">
+      <mat-button-toggle value="all">All ages</mat-button-toggle>
+      <mat-button-toggle value="5-10">5–10</mat-button-toggle>
+      <mat-button-toggle value="10-15">10–15</mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <div class="category-filters" aria-label="Filter by subject">
+      <button mat-stroked-button type="button" [class.filter-active]="selectedCategory() === 'all'" (click)="selectedCategory.set('all')">All trails</button>
+      @for (category of categories(); track category) {
+        <button mat-stroked-button type="button" [class.filter-active]="selectedCategory() === category" (click)="selectedCategory.set(category)">{{ category }}</button>
+      }
+    </div>
+  </section>
+
+  @if (catalog.loading()) {
+    <div class="library-status" role="status"><mat-icon aria-hidden="true">hourglass_top</mat-icon> Loading the shelf...</div>
+  } @else if (catalog.error()) {
+    <div class="library-status" role="alert"><mat-icon aria-hidden="true">cloud_off</mat-icon><span>{{ catalog.error() }}</span><button mat-stroked-button type="button" (click)="catalog.loadGames()">Try again</button></div>
+  } @else {
+    <div class="results-line">
+      <span>{{ filteredGames().length }} trails ready</span>
+      @if (searchTerm() || selectedCategory() !== 'all' || selectedAgeBand() !== 'all') {
+        <button mat-button type="button" (click)="searchTerm.set(''); selectedCategory.set('all'); selectedAgeBand.set('all')">Reset filters</button>
+      }
+    </div>
+    <div class="game-grid">
+      @for (game of filteredGames(); track game.id) {
+        <kids-game-card [game]="game"></kids-game-card>
+      } @empty {
+        <div class="library-status"><mat-icon aria-hidden="true">sentiment_satisfied</mat-icon><span>No trail matches that search yet.</span></div>
+      }
+    </div>
+  }
+</div>

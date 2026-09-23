@@ -1,0 +1,129 @@
+.library-page {
+  display: grid;
+  gap: 1.8rem;
+}
+
+.library-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.library-heading h1 {
+  max-width: 640px;
+  margin-top: 0.65rem;
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  line-height: 0.9;
+}
+
+.library-heading p:last-child {
+  max-width: 540px;
+  margin-top: 1rem;
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.55;
+}
+
+.shelf-mark {
+  display: grid;
+  width: 108px;
+  height: 108px;
+  place-items: center;
+  border-radius: 28px;
+  color: var(--teal-dark);
+  background: var(--yellow);
+  box-shadow: 12px 12px 0 var(--coral);
+  font-size: 3.4rem;
+  transform: rotate(7deg);
+}
+
+.filters {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.76);
+}
+
+.search-field {
+  width: min(100%, 460px);
+}
+
+.category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.category-filters button {
+  color: var(--muted);
+  border-color: var(--line);
+}
+
+.category-filters button.filter-active {
+  color: var(--teal-dark);
+  border-color: var(--teal);
+  background: var(--sky);
+}
+
+.results-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.results-line button {
+  color: var(--teal-dark);
+}
+
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.library-status {
+  display: flex;
+  min-height: 180px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  grid-column: 1 / -1;
+  border: 1px dashed var(--line);
+  border-radius: 18px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.library-status mat-icon {
+  color: var(--teal);
+}
+
+@media (max-width: 900px) {
+  .game-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .library-heading {
+    align-items: start;
+  }
+
+  .shelf-mark {
+    width: 68px;
+    height: 68px;
+    border-radius: 18px;
+    box-shadow: 7px 7px 0 var(--coral);
+    font-size: 2.1rem;
+  }
+
+  .game-grid {
+    grid-template-columns: 1fr;
+  }
+}

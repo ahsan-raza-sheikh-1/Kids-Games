@@ -1,0 +1,388 @@
+{
+  "version": 1,
+  "games": [
+    {
+      "id": "counting-garden",
+      "title": "Counting Garden",
+      "ageBand": "5-10",
+      "minAge": 5,
+      "maxAge": 10,
+      "category": "Numbers",
+      "icon": "🌼",
+      "accent": "sun",
+      "description": "Help friendly garden visitors count, compare, and grow their number sense.",
+      "skills": ["Number sense", "Focus"],
+      "durationMinutes": 5,
+      "difficulty": "Starter",
+      "interaction": "choice",
+      "rounds": [
+        {
+          "prompt": "How many flowers are blooming?",
+          "visual": "🌼 🌼 🌼",
+          "choices": [{ "id": "2", "label": "2" }, { "id": "3", "label": "3" }, { "id": "4", "label": "4" }],
+          "answer": "3",
+          "hint": "Touch-count each flower once."
+        },
+        {
+          "prompt": "How many butterflies are visiting?",
+          "visual": "🦋 🦋 🦋 🦋",
+          "choices": [{ "id": "3", "label": "3" }, { "id": "4", "label": "4" }, { "id": "5", "label": "5" }],
+      "description": "Guide a bright little snake around the garden and choose how far you want to go.",
+          "hint": "Start at the left and count forward."
+        },
+        {
+          "prompt": "Which number comes after 6?",
+          "visual": "5  6  ❓",
+          "choices": [{ "id": "5", "label": "5" }, { "id": "7", "label": "7" }, { "id": "8", "label": "8" }],
+          "answer": "7",
+          "hint": "Numbers grow by one."
+        },
+        {
+          "prompt": "Which group has more apples?",
+          "visual": "🍎 🍎   or   🍎 🍎 🍎",
+          "choices": [{ "id": "left", "label": "Left group" }, { "id": "right", "label": "Right group" }, { "id": "same", "label": "They are equal" }],
+          "answer": "right",
+          "hint": "Compare the number of apples in each group."
+        }
+      ]
+    },
+    {
+      "id": "color-patterns",
+      "title": "Color Patterns",
+      "ageBand": "5-10",
+      "minAge": 5,
+      "maxAge": 10,
+      "category": "Patterns",
+      "icon": "🎨",
+      "accent": "coral",
+      "description": "Spot the repeating colors and finish each cheerful pattern.",
+      "skills": ["Pattern recognition", "Visual reasoning"],
+      "durationMinutes": 6,
+      "difficulty": "Growing",
+      "interaction": "pattern",
+      "rounds": [
+        {
+          "prompt": "What comes next?",
+          "visual": "🔴 🔵 🔴 🔵 ❓",
+          "choices": [{ "id": "red", "label": "Red" }, { "id": "blue", "label": "Blue" }, { "id": "green", "label": "Green" }],
+          "answer": "red",
+          "hint": "The colors take turns."
+        },
+        {
+          "prompt": "Which shape completes the pattern?",
+          "visual": "⭐ ⭐ 🌙 ⭐ ⭐ ❓",
+          "choices": [{ "id": "star", "label": "Star" }, { "id": "moon", "label": "Moon" }, { "id": "sun", "label": "Sun" }],
+          "answer": "moon",
+          "hint": "Look for the small group that repeats."
+        },
+        {
+          "prompt": "What comes next in this size pattern?",
+          "visual": "●  ●●  ●  ●●  ❓",
+          "choices": [{ "id": "one", "label": "One dot" }, { "id": "two", "label": "Two dots" }, { "id": "three", "label": "Three dots" }],
+          "answer": "one",
+          "hint": "The groups alternate between one and two dots."
+        },
+        {
+          "prompt": "Finish the pattern.",
+          "visual": "🟩 🟨 🟨 🟩 🟨 🟨 ❓",
+          "choices": [{ "id": "green", "label": "Green" }, { "id": "yellow", "label": "Yellow" }, { "id": "purple", "label": "Purple" }],
+          "answer": "green",
+          "hint": "Each group has one green and two yellow squares."
+        }
+      ]
+    },
+    {
+      "id": "word-detective",
+      "title": "Word Detective",
+      "ageBand": "5-10",
+      "minAge": 5,
+      "maxAge": 10,
+      "category": "Words",
+      "icon": "🔎",
+      "accent": "mint",
+      "description": "Follow clues, build vocabulary, and find the word that fits.",
+      "skills": ["Vocabulary", "Reading"],
+      "durationMinutes": 7,
+      "difficulty": "Growing",
+      "interaction": "choice",
+      "rounds": [
+        {
+          "prompt": "Which word rhymes with 'star'?",
+          "visual": "⭐",
+          "choices": [{ "id": "car", "label": "Car" }, { "id": "tree", "label": "Tree" }, { "id": "fish", "label": "Fish" }],
+          "answer": "car",
+          "hint": "Listen for the ending sound."
+        },
+        {
+          "prompt": "Which word means the opposite of 'quiet'?",
+          "visual": "🤫",
+          "choices": [{ "id": "loud", "label": "Loud" }, { "id": "soft", "label": "Soft" }, { "id": "slow", "label": "Slow" }],
+          "answer": "loud",
+          "hint": "Think about a noisy playground."
+        },
+        {
+          "prompt": "Which word completes this sentence? The sun is ___.",
+          "visual": "☀️",
+          "choices": [{ "id": "bright", "label": "bright" }, { "id": "sleepy", "label": "sleepy" }, { "id": "cold", "label": "cold" }],
+          "answer": "bright",
+          "hint": "What does sunlight help you see?"
+        },
+        {
+          "prompt": "Which word starts with the same sound as 'moon'?",
+          "visual": "🌙",
+          "choices": [{ "id": "mouse", "label": "Mouse" }, { "id": "sun", "label": "Sun" }, { "id": "rain", "label": "Rain" }],
+          "answer": "mouse",
+          "hint": "Say both words slowly."
+        }
+      ]
+    },
+    {
+      "id": "fraction-forge",
+      "title": "Fraction Forge",
+      "ageBand": "10-15",
+      "minAge": 10,
+      "maxAge": 15,
+      "category": "Maths",
+      "icon": "🧩",
+      "accent": "ocean",
+      "description": "Shape fractions into equivalent values and solve quick-fire challenges.",
+      "skills": ["Fractions", "Problem solving"],
+      "durationMinutes": 8,
+      "difficulty": "Challenge",
+      "interaction": "choice",
+      "rounds": [
+        {
+          "prompt": "Which fraction is equivalent to 1/2?",
+          "visual": "1/2 = ?",
+          "choices": [{ "id": "2/4", "label": "2/4" }, { "id": "2/3", "label": "2/3" }, { "id": "3/5", "label": "3/5" }],
+          "answer": "2/4",
+          "hint": "Multiply the numerator and denominator by the same number."
+        },
+        {
+          "prompt": "What is 3/4 + 1/4?",
+          "visual": "🍕  3/4 + 1/4",
+          "choices": [{ "id": "1", "label": "1" }, { "id": "3/8", "label": "3/8" }, { "id": "4/8", "label": "4/8" }],
+          "answer": "1",
+          "hint": "The denominators already match."
+        },
+        {
+          "prompt": "Which is the greatest value?",
+          "visual": "2/3   3/5   1/2",
+          "choices": [{ "id": "2/3", "label": "2/3" }, { "id": "3/5", "label": "3/5" }, { "id": "1/2", "label": "1/2" }],
+          "answer": "2/3",
+          "hint": "Compare them using a common denominator or decimals."
+        },
+        {
+          "prompt": "What is 5/6 - 1/3?",
+          "visual": "5/6 - 1/3 = ?",
+          "choices": [{ "id": "1/2", "label": "1/2" }, { "id": "2/3", "label": "2/3" }, { "id": "4/6", "label": "4/6" }],
+          "answer": "1/2",
+          "hint": "Rewrite 1/3 as 2/6 first."
+        }
+      ]
+    },
+    {
+      "id": "logic-lab",
+      "title": "Logic Lab",
+      "ageBand": "10-15",
+      "minAge": 10,
+      "maxAge": 15,
+      "category": "Logic",
+      "icon": "🧠",
+      "accent": "violet",
+      "description": "Test deduction, sequences, and careful thinking with short logic puzzles.",
+      "skills": ["Deduction", "Sequences"],
+      "durationMinutes": 9,
+      "difficulty": "Challenge",
+      "interaction": "pattern",
+      "rounds": [
+        {
+          "prompt": "Which number completes the sequence?",
+          "visual": "2, 4, 8, 16, ❓",
+          "choices": [{ "id": "24", "label": "24" }, { "id": "32", "label": "32" }, { "id": "34", "label": "34" }],
+          "answer": "32",
+          "hint": "Each number is doubled."
+        },
+        {
+          "prompt": "If all zips are fast and Kai is a zip, what is true?",
+          "visual": "All zips → fast\nKai → zip",
+          "choices": [{ "id": "fast", "label": "Kai is fast" }, { "id": "slow", "label": "Kai is slow" }, { "id": "unknown", "label": "We cannot know" }],
+          "answer": "fast",
+          "hint": "Follow the two facts in order."
+        },
+        {
+          "prompt": "What is the next letter?",
+          "visual": "A, C, E, G, ❓",
+          "choices": [{ "id": "H", "label": "H" }, { "id": "I", "label": "I" }, { "id": "J", "label": "J" }],
+          "answer": "I",
+          "hint": "Count two letters forward each time."
+        },
+        {
+          "prompt": "A cube has 6 faces. How many faces do two cubes have altogether?",
+          "visual": "🧊 + 🧊",
+          "choices": [{ "id": "6", "label": "6" }, { "id": "12", "label": "12" }, { "id": "18", "label": "18" }],
+          "answer": "12",
+          "hint": "Add the faces on both cubes."
+        }
+      ]
+    },
+    {
+      "id": "science-sort",
+      "title": "Science Sort",
+      "ageBand": "10-15",
+      "minAge": 10,
+      "maxAge": 15,
+      "category": "Science",
+      "icon": "🔬",
+      "accent": "mint",
+      "description": "Make smart observations about matter, energy, and the living world.",
+      "skills": ["Scientific thinking", "Observation"],
+      "durationMinutes": 8,
+      "difficulty": "Challenge",
+      "interaction": "choice",
+      "rounds": [
+        {
+          "prompt": "Which state of matter keeps its own shape?",
+          "visual": "🧊  💧  💨",
+          "choices": [{ "id": "solid", "label": "Solid" }, { "id": "liquid", "label": "Liquid" }, { "id": "gas", "label": "Gas" }],
+          "answer": "solid",
+          "hint": "Think about a block of ice."
+        },
+        {
+          "prompt": "Which force pulls objects toward Earth?",
+          "visual": "🍎 ↓",
+          "choices": [{ "id": "gravity", "label": "Gravity" }, { "id": "friction", "label": "Friction" }, { "id": "magnetism", "label": "Magnetism" }],
+          "answer": "gravity",
+          "hint": "It is why a dropped apple falls."
+        },
+        {
+          "prompt": "Plants use sunlight to make food. What is this process called?",
+          "visual": "🌱 + ☀️",
+          "choices": [{ "id": "photosynthesis", "label": "Photosynthesis" }, { "id": "evaporation", "label": "Evaporation" }, { "id": "condensation", "label": "Condensation" }],
+          "answer": "photosynthesis",
+          "hint": "The word starts with photo, meaning light."
+        },
+        {
+          "prompt": "Which material is a good electrical conductor?",
+          "visual": "🔋 ─── ?",
+          "choices": [{ "id": "copper", "label": "Copper" }, { "id": "rubber", "label": "Rubber" }, { "id": "glass", "label": "Glass" }],
+          "answer": "copper",
+          "hint": "Many wires use this shiny metal."
+        }
+      ]
+    },
+    {
+      "id": "code-breaker",
+      "title": "Code Breaker",
+      "ageBand": "10-15",
+      "minAge": 10,
+      "maxAge": 15,
+      "category": "Computing",
+      "icon": "💻",
+      "accent": "sun",
+      "description": "Decode patterns and practice the thinking habits behind great programs.",
+      "skills": ["Algorithms", "Computational thinking"],
+      "durationMinutes": 10,
+      "difficulty": "Challenge",
+      "interaction": "choice",
+      "rounds": [
+        {
+          "prompt": "If A = 1, B = 2, and C = 3, what is the code for CAB?",
+          "visual": "C  A  B",
+          "choices": [{ "id": "312", "label": "312" }, { "id": "123", "label": "123" }, { "id": "321", "label": "321" }],
+          "answer": "312",
+          "hint": "Translate each letter from left to right."
+        },
+        {
+          "prompt": "Which step should an algorithm do first?",
+          "visual": "🧩  →  ?",
+          "choices": [{ "id": "goal", "label": "Define the goal" }, { "id": "guess", "label": "Guess randomly" }, { "id": "finish", "label": "Skip to the finish" }],
+          "answer": "goal",
+          "hint": "A clear problem comes before clear steps."
+        },
+        {
+          "prompt": "What does a loop help a program do?",
+          "visual": "🔁 🔁 🔁",
+          "choices": [{ "id": "repeat", "label": "Repeat steps" }, { "id": "delete", "label": "Delete data" }, { "id": "sleep", "label": "Turn off the computer" }],
+          "answer": "repeat",
+          "hint": "The clue is in the looping arrow."
+        },
+        {
+          "prompt": "A bug is found in a program. What is the best next move?",
+          "visual": "🐞 💻",
+          "choices": [{ "id": "debug", "label": "Test and debug it" }, { "id": "hide", "label": "Hide the bug" }, { "id": "quit", "label": "Give up immediately" }],
+          "answer": "debug",
+          "hint": "Good programmers investigate one step at a time."
+        }
+      ]
+    },
+    {
+      "id": "classic-snake",
+      "title": "Classic Snake",
+      "ageBand": "5-10",
+      "minAge": 5,
+      "maxAge": 10,
+      "category": "Arcade",
+      "icon": "🐍",
+      "accent": "mint",
+      "description": "Guide a bright little snake around the garden and choose how far you want to go.",
+      "skills": ["Planning", "Hand-eye coordination"],
+      "durationMinutes": 5,
+      "difficulty": "Starter",
+      "interaction": "snake",
+      "rounds": [],
+      "settings": { "boardSize": 12, "targetScore": 5, "maxTargetScore": 20, "tickMilliseconds": 180 }
+    },
+    {
+      "id": "garden-mines",
+      "title": "Garden Mines",
+      "ageBand": "5-10",
+      "minAge": 5,
+      "maxAge": 10,
+      "category": "Logic",
+      "icon": "💣",
+      "accent": "coral",
+      "description": "Read the clues, flag the hidden mines, and clear the garden safely.",
+      "skills": ["Logic", "Careful observation"],
+      "durationMinutes": 7,
+      "difficulty": "Growing",
+      "interaction": "mines",
+      "rounds": [],
+      "settings": { "boardSize": 8, "mineCount": 9 }
+    },
+    {
+      "id": "kids-chess",
+      "title": "Kids Chess",
+      "ageBand": "10-15",
+      "minAge": 10,
+      "maxAge": 15,
+      "category": "Board Games",
+      "icon": "♟",
+      "accent": "ocean",
+      "description": "Practice seeing ahead and capture the computer king in a friendly match.",
+      "skills": ["Strategy", "Pattern recognition"],
+      "durationMinutes": 10,
+      "difficulty": "Challenge",
+      "interaction": "chess",
+      "rounds": [],
+      "settings": { "boardSize": 8 }
+    },
+    {
+      "id": "kids-checkers",
+      "title": "Kids Checkers",
+      "ageBand": "10-15",
+      "minAge": 10,
+      "maxAge": 15,
+      "category": "Board Games",
+      "icon": "🔴",
+      "accent": "coral",
+      "description": "Jump, plan, and crown your pieces in a classic checkers challenge.",
+      "skills": ["Strategy", "Spatial reasoning"],
+      "durationMinutes": 10,
+      "difficulty": "Challenge",
+      "interaction": "checkers",
+      "rounds": [],
+      "settings": { "boardSize": 8 }
+    }
+  ]
+}

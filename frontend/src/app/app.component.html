@@ -1,0 +1,36 @@
+<div class="app-shell">
+  <mat-toolbar class="app-toolbar">
+    <a class="brand" routerLink="/" aria-label="BrightTrail home">
+      <span class="brand-mark" aria-hidden="true">✦</span>
+      <span class="brand-copy">
+        <strong>BrightTrail</strong>
+        <small>playful learning</small>
+      </span>
+    </a>
+
+    <nav class="toolbar-nav" aria-label="Primary navigation">
+      <a mat-button routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+      <a mat-button routerLink="/library" routerLinkActive="active-link">Game shelf</a>
+    </nav>
+
+    <span class="toolbar-spacer"></span>
+    <span class="star-count" aria-label="Total stars earned">
+      <mat-icon aria-hidden="true">star</mat-icon>
+      {{ progress.totalStars() }}
+    </span>
+    <button mat-icon-button type="button" class="sound-button" (click)="sound.toggle()"
+      [attr.aria-label]="sound.enabled() ? 'Mute game sounds' : 'Unmute game sounds'">
+      <mat-icon>{{ sound.enabled() ? 'volume_up' : 'volume_off' }}</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <main class="app-main">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="app-footer">
+    <span>BrightTrail</span>
+    <span>Small steps. Bright ideas.</span>
+    <span>Progress stays on this device.</span>
+  </footer>
+</div>

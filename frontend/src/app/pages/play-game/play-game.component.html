@@ -1,0 +1,99 @@
+<div class="page-wrap play-page">
+  @if (game(); as currentGame) {
+    @if (isRetroGame()) {
+      <kids-retro-game [game]="currentGame"></kids-retro-game>
+    } @else if (status() === 'complete') {
+      <section class="completion-panel" aria-labelledby="complete-title">
+        <div class="completion-confetti" aria-hidden="true">✦　✧　✦</div>
+        <span class="completion-icon" aria-hidden="true">{{ currentGame.icon }}</span>
+        <p class="eyebrow">Trail complete</p>
+        <h1 id="complete-title">You made it bright.</h1>
+        <p class="completion-copy">{{ currentGame.title }} is in your collection. Keep exploring or give this trail another go.</p>
+        <div class="stars" [attr.aria-label]="finalStars() + ' stars earned'">
+          @for (star of [1, 2, 3]; track star) {
+            <mat-icon [class.star-earned]="star <= finalStars()">star</mat-icon>
+          }
+        </div>
+        <div class="completion-actions">
+          <button mat-flat-button color="primary" type="button" (click)="restart()">Play again</button>
+          <a mat-stroked-button routerLink="/library">Back to shelf</a>
+        </div>
+      </section>
+    } @else if (currentRound(); as round) {
+      <div class="play-topline">
+        <a mat-button routerLink="/library"><mat-icon aria-hidden="true">arrow_back</mat-icon> Game shelf</a>
+        <span class="score-chip"><mat-icon aria-hidden="true">star</mat-icon> {{ score() }} correct</span>
+      </div>
+
+      <section class="play-heading" [attr.data-accent]="currentGame.accent">
+        <div class="play-icon" aria-hidden="true">{{ currentGame.icon }}</div>
+        <div>
+          <p class="eyebrow">{{ currentGame.category }} · Ages {{ currentGame.ageBand }}</p>
+          <h1>{{ currentGame.title }}</h1>
+          <p>{{ currentGame.description }}</p>
+        </div>
+      </section>
+
+      <div class="round-progress" aria-label="Game progress">
+        <div class="round-label"><span>Round {{ roundIndex() + 1 }} of {{ currentGame.rounds.length }}</span><span>{{ score() }} stars in the making</span></div>
+        <mat-progress-bar mode="determinate" [value]="progressPercent()"></mat-progress-bar>
+      </div>
+
+      <mat-card class="question-card">
+        <mat-card-content>
+          <p class="question-kicker">Look closely</p>
+          <h2>{{ round.prompt }}</h2>
+          <div class="question-visual" [class.pattern-visual]="currentGame.interaction === 'pattern'">{{ round.visual }}</div>
+
+          <div class="choices" role="group" [attr.aria-label]="round.prompt">
+            @for (choice of round.choices; track choice.id) {
+              <button mat-stroked-button type="button" class="choice-button"
+                [class.choice-selected]="selectedAnswer() === choice.id"
+                [class.choice-correct]="status() === 'correct' && choice.id === round.answer"
+                [class.choice-wrong]="status() === 'incorrect' && selectedAnswer() === choice.id"
+                [disabled]="status() !== 'idle'" (click)="choose(choice.id)">
+                <span>{{ choice.label }}</span>
+                @if (status() === 'correct' && choice.id === round.answer) {
+                  <mat-icon aria-hidden="true">check_circle</mat-icon>
+                }
+                @if (status() === 'incorrect' && selectedAnswer() === choice.id) {
+                  <mat-icon aria-hidden="true">refresh</mat-icon>
+                }
+              </button>
+            }
+          </div>
+
+          <div class="question-footer">
+            @if (status() === 'idle') {
+              <button mat-button type="button" (click)="showHint.set(!showHint())">
+                <mat-icon aria-hidden="true">lightbulb</mat-icon>
+                {{ showHint() ? 'Hide hint' : 'Need a hint?' }}
+              </button>
+            }
+            @if (showHint() && status() === 'idle') {
+              <p class="hint"><mat-icon aria-hidden="true">tips_and_updates</mat-icon>{{ round.hint }}</p>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      @if (status() === 'correct') {
+        <div class="feedback feedback-correct" role="status">
+          <mat-icon aria-hidden="true">celebration</mat-icon>
+          <div><strong>Great thinking.</strong><span>That answer fits the clues.</span></div>
+          <button mat-flat-button color="primary" type="button" (click)="continue()">{{ roundIndex() === currentGame.rounds.length - 1 ? 'See my stars' : 'Next round' }} <mat-icon iconPositionEnd aria-hidden="true">arrow_forward</mat-icon></button>
+        </div>
+      }
+
+      @if (status() === 'incorrect') {
+        <div class="feedback feedback-wrong" role="status">
+          <mat-icon aria-hidden="true">replay</mat-icon>
+          <div><strong>Good try.</strong><span>Take another look at the clue.</span></div>
+          <button mat-stroked-button type="button" (click)="tryAgain()">Try again</button>
+        </div>
+      }
+    }
+  } @else {
+    <div class="play-loading" role="status"><mat-icon aria-hidden="true">hourglass_top</mat-icon> Loading your trail...</div>
+  }
+</div>

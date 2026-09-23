@@ -1,0 +1,36 @@
+<mat-card class="game-card" [attr.data-accent]="game().accent">
+  <mat-card-content>
+    <div class="card-topline">
+      <span class="game-icon" aria-hidden="true">{{ game().icon }}</span>
+      <span class="age-pill">Ages {{ game().ageBand }}</span>
+    </div>
+
+    <div class="card-copy">
+      <div class="title-row">
+        <h3>{{ game().title }}</h3>
+        @if (progress.isCompleted(game().id)) {
+          <mat-icon class="completed-icon" aria-label="Completed">check_circle</mat-icon>
+        }
+      </div>
+      <p>{{ game().description }}</p>
+    </div>
+
+    <div class="skill-list" aria-label="Skills">
+      @for (skill of game().skills; track skill) {
+        <span>{{ skill }}</span>
+      }
+    </div>
+
+    <div class="card-meta">
+      <span><mat-icon aria-hidden="true">schedule</mat-icon>{{ game().durationMinutes }} min</span>
+      <span><mat-icon aria-hidden="true">bolt</mat-icon>{{ game().difficulty }}</span>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <a mat-flat-button color="primary" [routerLink]="['/play', game().id]">
+      Play now
+      <mat-icon iconPositionEnd aria-hidden="true">arrow_forward</mat-icon>
+    </a>
+  </mat-card-actions>
+</mat-card>

@@ -3,3 +3,9 @@ node_modules/
 .netlify/
 dist/
 dist.zip
+frontend/.angular/
+frontend/node_modules/
+frontend/dist/
+backend/bin/
+backend/obj/
+publish/

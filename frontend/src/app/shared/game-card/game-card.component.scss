@@ -1,0 +1,153 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.game-card {
+  display: flex;
+  height: 100%;
+  min-height: 300px;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-top: 5px solid var(--teal);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 26px rgba(12, 83, 97, 0.08);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.game-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 34px rgba(12, 83, 97, 0.14);
+}
+
+.game-card[data-accent='sun'] {
+  border-top-color: var(--yellow);
+}
+
+.game-card[data-accent='coral'] {
+  border-top-color: var(--coral);
+}
+
+.game-card[data-accent='mint'] {
+  border-top-color: #59b98d;
+}
+
+.game-card[data-accent='ocean'] {
+  border-top-color: #3297bf;
+}
+
+.game-card[data-accent='violet'] {
+  border-top-color: #7a79b8;
+}
+
+.game-card mat-card-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 1.1rem 1.1rem 0.7rem;
+}
+
+.card-topline,
+.card-meta,
+.title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.game-icon {
+  display: grid;
+  width: 3.2rem;
+  height: 3.2rem;
+  place-items: center;
+  border-radius: 15px;
+  background: var(--sky);
+  font-size: 1.8rem;
+}
+
+.game-card[data-accent='sun'] .game-icon {
+  background: #fff4c9;
+}
+
+.game-card[data-accent='coral'] .game-icon {
+  background: var(--coral-soft);
+}
+
+.game-card[data-accent='mint'] .game-icon {
+  background: var(--mint);
+}
+
+.age-pill {
+  padding: 0.35rem 0.55rem;
+  border-radius: 999px;
+  color: var(--teal-dark);
+  background: var(--sky);
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.card-copy {
+  margin-top: 1.2rem;
+}
+
+.card-copy h3 {
+  font-size: 1.55rem;
+  line-height: 1;
+}
+
+.card-copy p {
+  margin-top: 0.55rem;
+  color: var(--muted);
+  line-height: 1.48;
+}
+
+.completed-icon {
+  color: #2c9a6a;
+}
+
+.skill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+
+.skill-list span {
+  padding: 0.35rem 0.55rem;
+  border-radius: 8px;
+  color: var(--teal-dark);
+  background: #eef8f7;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.card-meta {
+  justify-content: flex-start;
+  margin-top: auto;
+  padding-top: 1.1rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.card-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.card-meta mat-icon {
+  width: 1rem;
+  height: 1rem;
+  font-size: 1rem;
+}
+
+mat-card-actions {
+  padding: 0.7rem 1.1rem 1.1rem;
+}
+
+mat-card-actions a {
+  width: 100%;
+}
