@@ -11,7 +11,7 @@
     "start-modern": "npm --prefix frontend start",
     "build-modern": "npm --prefix frontend run build",
     "publish-modern": "npm --prefix frontend run build && dotnet publish backend/KidsGame.Api.csproj --configuration Release --output publish",
-    "deploy-netlify": "npx netlify deploy --prod",
+    "deploy-netlify": "npx netlify deploy --prod --build",
     "deploy-vercel": "cd web-build && vercel --prod",
     "deploy-firebase": "firebase deploy",
     "test": "echo No tests specified for web build",

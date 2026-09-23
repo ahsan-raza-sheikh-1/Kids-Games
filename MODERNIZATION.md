@@ -77,6 +77,18 @@ ghcr.io/<repository-owner>/brighttrail:latest
 
 The workflow is the deployment step currently configured for this repository. A runtime such as an internal Kubernetes cluster, Azure Container Apps, or another container host can pull that image without changing the application. A host-specific deploy job should only be added after its environment URL and credentials are configured as GitHub Actions secrets.
 
+## Netlify frontend deployment
+
+Netlify serves the Angular frontend as a static site and exposes the same checked-in catalog through `netlify/functions/api.js`. It is a frontend/serverless deployment, not the ASP.NET Core monolith; use the Docker or GHCR path when one-process hosting is required.
+
+After `netlify login` and linking or creating a site, deploy with:
+
+```powershell
+npm run deploy-netlify
+```
+
+The configured site publishes `frontend/dist/kids-game/browser`, routes `/api/*` to the catalog function, and sends Angular routes to `index.html`.
+
 ## Content model
 
 Games are stored in `backend/Data/game-catalog.json` and are loaded, cached, and validated by the backend. A game contains:
